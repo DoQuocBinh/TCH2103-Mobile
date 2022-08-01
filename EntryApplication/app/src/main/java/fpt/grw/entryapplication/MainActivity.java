@@ -33,6 +33,6 @@ public class MainActivity extends AppCompatActivity {
         TextInputLayout txtName = findViewById(R.id.txtUserName);
         String name = txtName.getEditText().getText().toString();
         //Display the text by using Toast
-        Toast.makeText(getApplicationContext(),"Helloo" + name,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),"Hello " + name,Toast.LENGTH_LONG).show();
     }
 }
