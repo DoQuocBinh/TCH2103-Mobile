@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EntryApplication</string>
+    <string name="okBtn">OK!</string>
+    <string name="yourName">Your Name</string>
 </resources>

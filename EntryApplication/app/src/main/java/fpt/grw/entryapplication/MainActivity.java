@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void sayHello() {
         //get the text that user entered
         TextInputLayout txtName = findViewById(R.id.txtUserName);
