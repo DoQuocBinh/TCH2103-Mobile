@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <title>BMI Calculator</title>
+</head>
+<script src="myscript.js" defer></script>
+<body>
+    <ion-app>
+        <ion-header>
+          <ion-toolbar color="primary">
+            <ion-title>BMI calculator</ion-title>
+          </ion-toolbar>
+        </ion-header>    
+        <ion-content>
+          <ion-item>
+            <ion-label position="floating">Weight</ion-label>
+            <ion-input id="input-weight"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Height</ion-label>
+            <ion-input id="input-height"></ion-input>
+          </ion-item>
+          <ion-grid>
+            <ion-row class="ion-text-center">
+                <ion-col>
+                    <ion-button id="btn-calculate">
+                        <ion-icon slot="start" name="calculator-outline"></ion-icon>
+                        Calculate</ion-button>
+                </ion-col>
+                <ion-col>
+                    <ion-button fill="outline" id="btn-clear">
+                        <ion-icon slot="start" name="refresh-circle-outline"></ion-icon>
+                        Reset</ion-button>
+                </ion-col>
+            </ion-row>
+          </ion-grid>
+          <div id="result">
+            
+          </div>
+        </ion-content>
+      </ion-app>
+</body>
+
+</html>
