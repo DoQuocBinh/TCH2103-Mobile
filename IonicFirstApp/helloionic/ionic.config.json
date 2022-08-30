@@ -1,0 +1,7 @@
+{
+  "name": "helloionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
