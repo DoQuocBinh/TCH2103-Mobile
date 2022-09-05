@@ -1,7 +1,7 @@
-import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
-import { useState } from 'react';
+import { IonButton, IonContent, IonHeader, IonImg, IonInput, IonItem, IonLabel, IonList, IonPage, IonRouterLink, IonSelect, IonSelectOption, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
+import { useEffect, useState } from 'react';
 import ExploreContainer from '../components/ExploreContainer';
-import { insertCustomer } from '../databaseHandler';
+import { getAllCustomer, insertCustomer } from '../databaseHandler';
 import { Customer } from '../models/Customer';
 import './Home.css';
 
@@ -11,11 +11,20 @@ const Home: React.FC = () => {
   const [picture, setPicture] = useState('')
   const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
 
+  const fetchDataFromDB = async()=>{
+    const allCus = await getAllCustomer()
+    setAllCustomers(allCus)
+  }
+
   const saveHandler = async () =>{
     const newCus : Customer = {'name':name,'languages':languages,'picture':picture}
      await insertCustomer(newCus)
      alert('Insert done!')
   }
+
+  useEffect(()=>{
+    fetchDataFromDB()
+  },[])
 
   return (
     <IonPage>
@@ -42,7 +51,19 @@ const Home: React.FC = () => {
           <IonInput onIonChange={e=>setPicture(e.detail.value!)}></IonInput>
         </IonItem>
         <IonButton onClick={saveHandler} expand='block' class='ion-margin'>Save</IonButton>
-      
+        <IonList>
+          {allCustomers.map(c=>
+            <IonItem key={c.id}>
+              <IonThumbnail slot='start'>
+                <IonImg src={c.picture}></IonImg>
+              </IonThumbnail>
+              <IonLabel>
+                <IonRouterLink routerLink={'/Detail/' +c.id}>{c.name}</IonRouterLink>
+                <IonLabel>{c.languages}</IonLabel>
+              </IonLabel>
+            </IonItem>
+          )}
+        </IonList>
       </IonContent>
     </IonPage>
   );
