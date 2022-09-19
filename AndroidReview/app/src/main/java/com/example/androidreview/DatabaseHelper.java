@@ -9,9 +9,12 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import entities.Exam;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Exams";
+    private static final String TABLE_EXAM = "Exams";
 
     public static final String ID = "id";
     public static final String NAME = "name";
@@ -20,13 +23,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase database;
 
-    private static final String DATABASE_CREATE = String.format(
+    private static final String TABLE_EXAM_CREATE = String.format(
       "CREATE TABLE %s (" +
       "   %s INTEGER PRIMARY KEY AUTOINCREMENT, " +
       "   %s TEXT, " +
       "   %s TEXT, " +
       "   %s TEXT)",
-      DATABASE_NAME, ID, NAME, EXAM_DATE, DESCRIPTION);
+            TABLE_EXAM, ID, NAME, EXAM_DATE, DESCRIPTION);
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -35,14 +38,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DATABASE_CREATE);
+        db.execSQL(TABLE_EXAM_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXAM);
 
-        Log.v(this.getClass().getName(), DATABASE_NAME + " database upgrade to version " +
+        Log.v(this.getClass().getName(), TABLE_EXAM + " database upgrade to version " +
                 newVersion + " - old data lost");
         onCreate(db);
     }
@@ -54,11 +57,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(EXAM_DATE, exam_date);
         rowValues.put(DESCRIPTION, description);
 
-        return database.insertOrThrow(DATABASE_NAME, null, rowValues);
+        return database.insertOrThrow(TABLE_EXAM, null, rowValues);
     }
 
     public ArrayList<Exam> getExams() {
-        Cursor cursor = database.query(DATABASE_NAME, new String[] {ID, NAME, EXAM_DATE, DESCRIPTION},
+        Cursor cursor = database.query(TABLE_EXAM, new String[] {ID, NAME, EXAM_DATE, DESCRIPTION},
                 null, null, null, null, "name");
 
         ArrayList<Exam> results = new ArrayList<>();

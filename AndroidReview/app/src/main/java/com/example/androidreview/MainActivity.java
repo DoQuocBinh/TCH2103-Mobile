@@ -2,15 +2,18 @@ package com.example.androidreview;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
+
+import entities.Exam;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
 
             ListView listView = findViewById(R.id.listview);
             listView.setAdapter(arrayAdapter);
+
+            //register event: click on Listview Item
+            listView.setOnItemClickListener((adapterView, view1, i, l) -> {
+                Exam selectedExam = exams.get(i);
+                openDetails(selectedExam);
+            });
         });
+    }
+
+    private void openDetails(Exam selectedExam) {
+        Intent intent = new Intent(MainActivity.this,ExamDetailsActivity.class);
+        intent.putExtra("examId",selectedExam.getId());
+        intent.putExtra("examName",selectedExam.getName());
+        startActivity(intent);
     }
 }

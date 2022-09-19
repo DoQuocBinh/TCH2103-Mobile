@@ -1,4 +1,4 @@
-package com.example.androidreview;
+package entities;
 
 import androidx.annotation.NonNull;
 
