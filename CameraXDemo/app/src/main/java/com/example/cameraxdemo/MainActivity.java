@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageCapture;
+import androidx.camera.core.ImageCaptureException;
 import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
@@ -17,7 +18,9 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +28,8 @@ import android.widget.Toast;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setItems(options,(dialog,item)->{
                 if (options[item]=="Take photo"){
-                    Toast.makeText(this,"take photo",Toast.LENGTH_SHORT).show();
+                    takePicture();
                 }else if(options[item]=="Choose from library"){
                     Toast.makeText(this,"Choose from library",Toast.LENGTH_SHORT).show();
                 }else if(options[item]=="View a picture from Uri"){
@@ -71,6 +76,34 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
         });
 
     }
+
+    private void takePicture() {
+        long timestamp = System.currentTimeMillis();
+        ImageCapture.OutputFileOptions option1 = new ImageCapture.OutputFileOptions
+                .Builder(new File(getApplicationContext().getFilesDir(), String.valueOf(timestamp))).build();
+        imageCapture.takePicture(
+                option1,
+                executor,
+                new ImageCapture.OnImageSavedCallback(){
+                    @Override
+                    public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                        //Update the UI: imageView
+                        runOnUiThread(()->{
+                            final Uri selectedImage = outputFileResults.getSavedUri();
+                            try {
+                                imageView.setImageBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImage));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        });
+                    }
+                    @Override
+                    public void onError(@NonNull ImageCaptureException exception) {
+                    }
+                }
+        );
+    }
+
     private boolean allPermissionsGranted(){
         for(String permission: REQUIRED_PERMISSIONS){
             if(ContextCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
