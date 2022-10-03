@@ -18,6 +18,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -69,14 +71,18 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
                 }else if(options[item]=="Choose from library"){
                     Toast.makeText(this,"Choose from library",Toast.LENGTH_SHORT).show();
                 }else if(options[item]=="View a picture from Uri"){
-                    Toast.makeText(this,"Choose from library",Toast.LENGTH_SHORT).show();
+                    String uri = inputPictureUri.getText().toString();
+                    File imgFile = new  File(uri);
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    imageView.setImageBitmap(myBitmap);
+                    dialog.dismiss();
                 }
             });
             builder.show();
         });
 
     }
-
+// /data/user/0/com.example.cameraxdemo/files/1664772838768
     private void takePicture() {
         long timestamp = System.currentTimeMillis();
         ImageCapture.OutputFileOptions option1 = new ImageCapture.OutputFileOptions
@@ -91,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements ImageAnalysis.Ana
                         runOnUiThread(()->{
                             final Uri selectedImage = outputFileResults.getSavedUri();
                             try {
+                                inputPictureUri.setText(outputFileResults.getSavedUri().getPath());
                                 imageView.setImageBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImage));
                             } catch (IOException e) {
                                 e.printStackTrace();
