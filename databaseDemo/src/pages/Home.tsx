@@ -20,6 +20,7 @@ const Home: React.FC = () => {
     const newCus : Customer = {'name':name,'languages':languages,'picture':picture}
      await insertCustomer(newCus)
      alert('Insert done!')
+     fetchDataFromDB()
   }
 
   useEffect(()=>{
